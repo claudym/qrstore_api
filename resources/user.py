@@ -7,7 +7,7 @@ from models.user import User
 
 
 class UserListResource(Resource):
-    @jwt_required(optional=True)
+    @jwt_required(optional=True)  # remove optional for production
     def post(self):
         json_data = request.get_json()
         username = json_data.get('username')
@@ -67,6 +67,7 @@ class UserResource(Resource):
         else:
             data = {
                 'id': user.id,
-                'username': user.username
+                'username': user.username,
+                'photo': user.photo
             }
         return data, HTTPStatus.OK
