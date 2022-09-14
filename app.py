@@ -4,7 +4,7 @@ from flask_migrate import Migrate
 from config import Config
 from extensions import db, jwt
 from resources.token import TokenResource
-from resources.user import UserListResource, UserResource
+from resources.user import UserListResource, UserResource, MeResource
 from resources.product import ProductListResource, ProductResource
 
 
@@ -26,6 +26,7 @@ def register_resources(app):
     api.add_resource(TokenResource, '/token')
     api.add_resource(UserListResource, '/users')
     api.add_resource(UserResource, '/user/<string:username>')
+    api.add_resource(MeResource, '/me')
     api.add_resource(ProductListResource, '/products')
     api.add_resource(ProductResource, '/product/<int:product_id>')
 
