@@ -3,8 +3,8 @@ from flask_restful import Api
 from flask_migrate import Migrate
 from config import Config
 from extensions import db, jwt
-# from models.user import User
-from resources.user import UserListResource
+from resources.token import TokenResource
+from resources.user import UserListResource, UserResource
 from resources.product import ProductListResource, ProductResource
 
 
@@ -23,7 +23,9 @@ def register_extensions(app):
 
 def register_resources(app):
     api = Api(app)
+    api.add_resource(TokenResource, '/token')
     api.add_resource(UserListResource, '/users')
+    api.add_resource(UserResource, '/user/<int:user_id>')
     api.add_resource(ProductListResource, '/products')
     api.add_resource(ProductResource, '/product/<int:product_id>')
 
