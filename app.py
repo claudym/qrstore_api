@@ -25,7 +25,7 @@ def register_resources(app):
     api = Api(app)
     api.add_resource(TokenResource, '/token')
     api.add_resource(UserListResource, '/users')
-    api.add_resource(UserResource, '/user/<int:user_id>')
+    api.add_resource(UserResource, '/user/<string:username>')
     api.add_resource(ProductListResource, '/products')
     api.add_resource(ProductResource, '/product/<int:product_id>')
 
