@@ -2,47 +2,33 @@ from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from http import HTTPStatus
+from marshmallow import ValidationError
 from utils import hash_password
 from models.user import User
+from schemas.user import UserSchema
+
+
+user_schema = UserSchema()
+user_public_schema = UserSchema(exclude=('email', 'first_name', 'last_name',
+                                        'tax_id', 'created_at', 'updated_at'))
 
 
 class UserListResource(Resource):
     @jwt_required(optional=True)  # remove optional for production
     def post(self):
         json_data = request.get_json()
-        username = json_data.get('username')
-        email = json_data.get('email')
-        if User.get_by_username(username):
+        try:
+            data = user_schema.load(data=json_data)
+        except ValidationError as err:
+            return {'message': 'Validation errors', 'errors': err.messages}, HTTPStatus.BAD_REQUEST
+        if User.get_by_username(data.get('username')):
             return {'message': 'username already used.'}, HTTPStatus.BAD_REQUEST
-        if User.get_by_email(email):
+        if User.get_by_email(data.get('email')):
             return {'message': 'email already used.'}, HTTPStatus.BAD_REQUEST
-        
-        non_hash_password = json_data.get('password')
-        hashed = hash_password(non_hash_password)
-        first_name = json_data.get('first_name')
-        last_name = json_data.get('last_name')
-        tax_id = json_data.get('tax_id')
-        photo = json_data.get('photo')
-        user = User(
-            username=username,
-            email=email,
-            hashed=hashed,
-            first_name=first_name,
-            last_name=last_name,
-            tax_id=tax_id,
-            photo=photo
-        )
+
+        user = User(**data)
         user.save()
-        data = {
-            'id': user.id,
-            'username': user.username,
-            'email': user.email,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'tax_id': user.tax_id,
-            'photo': user.photo
-        }
-        return data, HTTPStatus.CREATED
+        return user_schema.dump(user), HTTPStatus.CREATED
 
 
 class UserResource(Resource):
@@ -54,37 +40,12 @@ class UserResource(Resource):
         
         current_user = get_jwt_identity()
         if current_user == user.id:
-            data = {
-                'id': user.id,
-                'username': user.username,
-                'email': user.email,
-                'first_name': user.first_name,
-                'last_name': user.last_name,
-                'tax_id': user.tax_id,
-                'photo': user.photo
-                # 'role_id': user.role_id
-            }
-        else:
-            data = {
-                'id': user.id,
-                'username': user.username,
-                'photo': user.photo
-            }
-        return data, HTTPStatus.OK
+            return user_schema.dump(user)
+        return user_public_schema.dump(user)
 
 
 class MeResource(Resource):
     @jwt_required()
     def get(self):
         user = User.get_by_id(id=get_jwt_identity())
-        data = {
-                'id': user.id,
-                'username': user.username,
-                'email': user.email,
-                'first_name': user.first_name,
-                'last_name': user.last_name,
-                'tax_id': user.tax_id,
-                'photo': user.photo
-                # 'role_id': user.role_id
-        }
-        return data, HTTPStatus.OK
+        return user_schema.dump(user)
