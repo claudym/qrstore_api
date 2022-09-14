@@ -2,3 +2,9 @@ black
 pylint
 pytest
 flask
+flask-restful
+SQLAlchemy
+flask-SQLAlchemy
+psycopg2-binary
+passlib
+flask_migrate
