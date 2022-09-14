@@ -3,7 +3,12 @@ from flask_restful import Api
 from flask_migrate import Migrate
 from config import Config
 from extensions import db, jwt
-from resources.token import TokenResource, RefreshTokenResource
+from resources.token import (
+    TokenResource, 
+    RefreshTokenResource,
+    RevokeTokenResource,
+    block_list
+)
 from resources.user import UserListResource, UserResource, MeResource
 from resources.product import ProductListResource, ProductResource
 
@@ -20,11 +25,17 @@ def register_extensions(app):
     migrate = Migrate(app, db)
     jwt.init_app(app)
 
+    @jwt.token_in_blocklist_loader
+    def check_if_token_in_blocklist(jwt_header, jwt_payload):
+        jti = jwt_payload['jti']
+        return jti in block_list
+
 
 def register_resources(app):
     api = Api(app)
     api.add_resource(TokenResource, '/token')
     api.add_resource(RefreshTokenResource, '/refresh')
+    api.add_resource(RevokeTokenResource, '/revoke')
     api.add_resource(UserListResource, '/users')
     api.add_resource(UserResource, '/user/<string:username>')
     api.add_resource(MeResource, '/me')
