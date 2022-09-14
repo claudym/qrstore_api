@@ -9,3 +9,4 @@ psycopg2-binary
 passlib
 flask_migrate
 Flask-JWT-Extended
+marshmallow
