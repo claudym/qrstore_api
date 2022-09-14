@@ -1,12 +1,32 @@
 from flask import Flask
+from flask_restful import Api
+from flask_migrate import Migrate
+from config import Config
+from extensions import db
+# from models.user import User
+from resources.user import UserListResource
+from resources.product import ProductListResource, ProductResource
 
-app = Flask(__name__)
+
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object('config.Config.DevelopmentConfig')
+    register_extensions(app)
+    register_resources(app)
+    return app
+
+def register_extensions(app):
+    db.init_app(app)
+    migrate = Migrate(app, db)
 
 
-@app.route("/")
-def hello():
-    return "Hola 世界!!!"
+def register_resources(app):
+    api = Api(app)
+    api.add_resource(UserListResource, '/users')
+    api.add_resource(ProductListResource, '/products')
+    api.add_resource(ProductResource, '/product/<int:product_id>')
 
 
 if __name__ == "__main__":
+    app = create_app()
     app.run()
