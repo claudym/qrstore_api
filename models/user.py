@@ -6,7 +6,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), nullable=False, unique=True)
     email = db.Column(db.String(200), nullable=False, unique=True)
-    # role_id = db.Column(db.Integer(), db.ForeignKey('role.id'))
+    role_id = db.Column(db.Integer(), db.ForeignKey('role.id'))
     hashed = db.Column(db.String(120))
     first_name = db.Column(db.String(70))
     last_name = db.Column(db.String(70))
