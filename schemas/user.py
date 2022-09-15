@@ -7,9 +7,10 @@ class UserSchema(Schema):
         ordered = True
     
     id = fields.Int(dump_only=True)
+    role_id = fields.Int(required=True)
     username = fields.Str(required=True)
     email = fields.Email(required=True)
-    hashed = fields.Method(required=True, deserialize='load_hashed')
+    password = fields.Method(required=True, deserialize='load_hashed')
     first_name = fields.Str()
     last_name = fields.Str()
     tax_id = fields.Str()
