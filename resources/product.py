@@ -32,7 +32,7 @@ class ProductListResource(Resource):
         try:
             product.save()
         except DatabaseError as err:
-            return {'message': 'Validation errors', 'errors': str(err.orig)}, HTTPStatus.BAD_REQUEST
+            return {'message': 'Database errors', 'errors': str(err.orig)}, HTTPStatus.BAD_REQUEST
         return product_schema.dump(product), HTTPStatus.CREATED
 
 class ProductResource(Resource):
