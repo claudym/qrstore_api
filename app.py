@@ -11,6 +11,7 @@ from resources.token import (
 )
 from resources.user import UserListResource, UserResource, MeResource
 from resources.product import ProductListResource, ProductResource
+from models.role import Role
 
 
 def create_app():
