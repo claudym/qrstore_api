@@ -3,6 +3,7 @@ from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from http import HTTPStatus
 from marshmallow import ValidationError
+from sqlalchemy.exc import DatabaseError
 from utils import hash_password
 from models.user import User
 from schemas.user import UserSchema
@@ -27,7 +28,10 @@ class UserListResource(Resource):
             return {'message': 'email already used.'}, HTTPStatus.BAD_REQUEST
 
         user = User(**data)
-        user.save()
+        try:
+            user.save()
+        except DatabaseError as err:
+            return {'message': 'Validation errors', 'errors': str(err.orig)}, HTTPStatus.BAD_REQUEST
         return user_schema.dump(user), HTTPStatus.CREATED
 
 
