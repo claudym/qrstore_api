@@ -1,7 +1,8 @@
 from flask import Flask
 from flask_restful import Api
 from flask_migrate import Migrate
-from config import Config
+
+# from config import Config
 from extensions import db, jwt
 from resources.token import (
     TokenResource,
@@ -11,7 +12,7 @@ from resources.token import (
 )
 from resources.user import UserListResource, UserResource, MeResource
 from resources.product import ProductListResource, ProductResource
-from models.role import Role
+from models.role import Role  # pylint: disable=unused-import
 
 
 def create_app():
@@ -24,10 +25,11 @@ def create_app():
 
 def register_extensions(app):
     db.init_app(app)
-    migrate = Migrate(app, db)
+    migrate = Migrate(app, db)  # pylint: disable=unused-variable
     jwt.init_app(app)
 
     @jwt.token_in_blocklist_loader
+    # pylint: disable-next=unused-argument
     def check_if_token_in_blocklist(jwt_header, jwt_payload):
         jti = jwt_payload["jti"]
         return jti in block_list
@@ -46,5 +48,5 @@ def register_resources(app):
 
 
 if __name__ == "__main__":
-    app = create_app()
-    app.run()
+    application = create_app()
+    application.run()

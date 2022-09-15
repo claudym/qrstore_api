@@ -3,10 +3,11 @@ install:
 		pip install -r requirements.txt
 
 format:
-	black *.py
+	black config models resources schemas *.py
 
 lint:
-	pylint --disable=R,C app.py
+	pylint --load-plugins pylint_flask_sqlalchemy pylint_flask\
+		--disable=R,C,E1101,W0107 config models resources schemas *.py
 
 # test:
 # 	python -m pytest -vv test_app.py

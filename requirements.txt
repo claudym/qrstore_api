@@ -10,3 +10,5 @@ passlib
 flask_migrate
 Flask-JWT-Extended
 marshmallow
+pylint_flask
+pylint_flask_sqlalchemy
