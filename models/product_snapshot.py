@@ -8,7 +8,6 @@ class ProductSnapshot(db.Model):
     desc = db.Column(db.String(100), nullable=False)
     price = db.Column(db.Numeric(), nullable=False)
     size = db.Column(db.String(50))
-    image = db.Column(db.String(100), default=None)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
     updated_at = db.Column(
