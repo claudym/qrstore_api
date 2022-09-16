@@ -34,6 +34,13 @@ class ProductListResource(Resource):
 
         product = Product(**data)
         product.user_id = current_user
+        product_db = Product.get_by_desc_price_size(
+            product.desc, product.price, product.size
+        )
+        if product_db is not None:
+            return {
+                "message": "Product with same description, price, and size exists"
+            }, HTTPStatus.BAD_REQUEST
 
         try:
             product.save()
@@ -42,11 +49,11 @@ class ProductListResource(Resource):
                 "message": "Database errors",
                 "errors": str(err.orig),
             }, HTTPStatus.BAD_REQUEST
-        
+
         data = product_schema.dump(product)
-        data['product_id'] = data['id']
-        data['user_id'] = current_user
-        del data['id']
+        data["product_id"] = data["id"]
+        data["user_id"] = current_user
+        del data["id"]
 
         product_snapshot = ProductSnapshot(**data)
         try:
@@ -75,7 +82,7 @@ class ProductResource(Resource):
             return {"message": "Product not found"}, HTTPStatus.NOT_FOUND
 
         current_user = get_jwt_identity()
-        if User.get_by_id(current_user).role_id >= 3:  # 1-Admin, 2-Manager, 3-user
+        if User.get_by_id(current_user).role_id > 2:  # 1-Admin, 2-Manager, 3-User
             return {"message": "Access is not allowed"}, HTTPStatus.FORBIDDEN
 
         product.delete()
@@ -83,5 +90,48 @@ class ProductResource(Resource):
 
     @jwt_required()
     def patch(self, product_id):
-        # current_user = get_jwt_identity()
-        pass
+        json_data = request.get_json()
+        try:
+            data = product_schema.load(data=json_data, partial=("desc",))
+        except ValidationError as err:
+            return {
+                "message": "Database errors",
+                "errors": str(err.orig),
+            }, HTTPStatus.BAD_REQUEST
+
+        product = Product.get_by_id(product_id)
+        if product is None:
+            return {"message": "Product not found"}, HTTPStatus.NOT_FOUND
+
+        current_user = get_jwt_identity()
+        if User.get_by_id(current_user).role_id > 2:  # 1-Admin, 2-Manager, 3-User
+            return {"message": "Access is not allowed"}, HTTPStatus.FORBIDDEN
+
+        product.desc = data.get("desc") or product.desc
+        product.price = data.get("price") or product.price
+        product.size = data.get("size") or product.size
+        product.user_id = current_user
+
+        try:
+            product.save()
+        except DatabaseError as err:
+            return {
+                "message": "Database errors",
+                "errors": str(err.orig),
+            }, HTTPStatus.BAD_REQUEST
+
+        data = product_schema.dump(product)
+        data["product_id"] = data["id"]
+        data["user_id"] = current_user
+        del data["id"]
+
+        product_snapshot = ProductSnapshot(**data)
+        try:
+            product_snapshot.save()
+        except DatabaseError as err:
+            product.rollback()
+            return {
+                "message": "Database errors",
+                "errors": str(err.orig),
+            }, HTTPStatus.BAD_REQUEST
+        return product_schema.dump(product), HTTPStatus.CREATED
