@@ -39,7 +39,7 @@ class ProductListResource(Resource):
         )
         if product_db is not None:
             return {
-                "message": "Product with same description, price, and size exists"
+                "message": "Product with same description, price, size, and sex exists"
             }, HTTPStatus.BAD_REQUEST
 
         try:
@@ -138,4 +138,4 @@ class ProductResource(Resource):
                 "message": "Database errors",
                 "errors": str(err.orig),
             }, HTTPStatus.BAD_REQUEST
-        return product_schema.dump(product), HTTPStatus.CREATED
+        return product_schema.dump(product)
