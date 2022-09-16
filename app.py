@@ -13,6 +13,7 @@ from resources.token import (
 from resources.user import UserListResource, UserResource, MeResource
 from resources.product import ProductListResource, ProductResource
 from models.role import Role  # pylint: disable=unused-import
+from models.product_snapshot import ProductSnapshot # pylint: disable=unused-import 
 
 
 def create_app():
