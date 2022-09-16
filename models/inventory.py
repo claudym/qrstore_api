@@ -3,9 +3,12 @@ from extensions import db
 
 class Inventory(db.Model):
     __tablename__ = "inventory"
-    id = db.Column(db.Integer, primary_key=True)
     product_id = db.Column(
-        db.Integer, db.ForeignKey("product.id"), nullable=False, unique=True
+        db.Integer,
+        db.ForeignKey("product.id"),
+        nullable=False,
+        unique=True,
+        primary_key=True,
     )
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     count = db.Column(db.Integer, nullable=False)
@@ -22,11 +25,7 @@ class Inventory(db.Model):
         return cls.query.all()
 
     @classmethod
-    def get_by_id(cls, inventory_id):
-        return cls.query.filter_by(id=inventory_id).first()
-
-    @classmethod
-    def get_by_product(cls, product_id):
+    def get_by_product_id(cls, product_id):
         return cls.query.filter_by(product_id=product_id).first()
 
     def save(self):

@@ -44,3 +44,9 @@ class InventoryListResource(Resource):
                 "errors": str(err.orig),
             }, HTTPStatus.BAD_REQUEST
         return inventory_schema.dump(inventory)
+
+
+# class InventoryResource(Resource):
+#     @jwt_required()
+#     def get(self, inventory_id):
+#         inventory = Inventory.get_by

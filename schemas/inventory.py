@@ -5,7 +5,6 @@ class InventorySchema(Schema):
     class Meta:
         ordered = True
 
-    id = fields.Int(dump_only=True)
     product_id = fields.Int(required=True)
     user_id = fields.Int(dump_only=True)
     count = fields.Int(required=True)
