@@ -15,4 +15,4 @@ class InventorySchema(Schema):
     @validates("count")
     def validate_count(self, value):
         if value < 0:
-            raise ValidationError("Count should cannot be negative")
+            raise ValidationError("Count cannot be negative")

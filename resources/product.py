@@ -97,8 +97,8 @@ class ProductResource(Resource):
             data = product_schema.load(data=json_data, partial=("desc",))
         except ValidationError as err:
             return {
-                "message": "Database errors",
-                "errors": str(err.orig),
+                "message": "Validation errors",
+                "errors": err.messages,
             }, HTTPStatus.BAD_REQUEST
 
         product = Product.get_by_id(product_id)
