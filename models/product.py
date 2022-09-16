@@ -7,6 +7,7 @@ class Product(db.Model):
     desc = db.Column(db.String(100), nullable=False)
     price = db.Column(db.Numeric(), nullable=False)
     size = db.Column(db.String(50), nullable=False)
+    sex = db.Column(db.String(10), nullable=False)
     image = db.Column(db.String(100), default=None)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
@@ -36,6 +37,6 @@ class Product(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
-
+    
     def rollback(self):
         db.session.rollback()
