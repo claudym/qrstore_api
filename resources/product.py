@@ -6,6 +6,7 @@ from marshmallow import ValidationError
 from sqlalchemy.exc import DatabaseError
 from models.user import User
 from models.product import Product
+from models.product_snapshot import ProductSnapshot
 from schemas.product import ProductSchema
 
 
@@ -37,6 +38,21 @@ class ProductListResource(Resource):
         try:
             product.save()
         except DatabaseError as err:
+            return {
+                "message": "Database errors",
+                "errors": str(err.orig),
+            }, HTTPStatus.BAD_REQUEST
+        
+        data = product_schema.dump(product)
+        data['product_id'] = data['id']
+        data['user_id'] = current_user
+        del data['id']
+
+        product_snapshot = ProductSnapshot(**data)
+        try:
+            product_snapshot.save()
+        except DatabaseError as err:
+            product.rollback()
             return {
                 "message": "Database errors",
                 "errors": str(err.orig),
