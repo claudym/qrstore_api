@@ -7,8 +7,9 @@ class ProductSnapshot(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey("product.id"))
     desc = db.Column(db.String(100), nullable=False)
     price = db.Column(db.Numeric(), nullable=False)
-    size = db.Column(db.String(50))
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    size = db.Column(db.String(50), nullable=False)
+    sex = db.Column(db.String(10), nullable=False)
+    user_id = db.Column(db.Integer)
     created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
 
     @classmethod
