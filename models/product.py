@@ -4,7 +4,7 @@ from extensions import db
 class Product(db.Model):
     __tablename__ = "product"
     id = db.Column(db.Integer, primary_key=True)
-    desc = db.Column(db.String(100), nullable=False, unique=True)
+    desc = db.Column(db.String(100), nullable=False)
     price = db.Column(db.Numeric(), nullable=False)
     size = db.Column(db.String(50))
     image = db.Column(db.String(100), default=None)
