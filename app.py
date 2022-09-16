@@ -1,8 +1,6 @@
 from flask import Flask
 from flask_restful import Api
 from flask_migrate import Migrate
-
-# from config import Config
 from extensions import db, jwt
 from resources.token import (
     TokenResource,
@@ -12,9 +10,9 @@ from resources.token import (
 )
 from resources.user import UserListResource, UserResource, MeResource
 from resources.product import ProductListResource, ProductResource
+from resources.inventory import InventoryListResource
 from models.role import Role  # pylint: disable=unused-import
 from models.product_snapshot import ProductSnapshot  # pylint: disable=unused-import
-from models.inventory import Inventory  # pylint: disable=unused-import
 
 
 def create_app():
@@ -47,6 +45,7 @@ def register_resources(app):
     api.add_resource(MeResource, "/me")
     api.add_resource(ProductListResource, "/products")
     api.add_resource(ProductResource, "/product/<int:product_id>")
+    api.add_resource(InventoryListResource, "/inventory")
 
 
 if __name__ == "__main__":
