@@ -20,7 +20,7 @@ class TokenResource(Resource):
         email = json_data.get("email")
         password = json_data.get("password")
         user = User.get_by_email(email)
-        if user is None or not check_password(password, user.hashed):
+        if user is None or not check_password(password, user.password):
             return {
                 "message": "email or password is incorrect"
             }, HTTPStatus.UNAUTHORIZED
