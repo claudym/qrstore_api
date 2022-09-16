@@ -10,12 +10,6 @@ class ProductSnapshot(db.Model):
     size = db.Column(db.String(50))
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
-    updated_at = db.Column(
-        db.DateTime(),
-        nullable=False,
-        server_default=db.func.now(),
-        onupdate=db.func.now(),
-    )
 
     @classmethod
     def get_by_id(cls, product_snapshot_id):
