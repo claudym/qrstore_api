@@ -37,6 +37,6 @@ class Product(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
-    
+
     def rollback(self):
         db.session.rollback()

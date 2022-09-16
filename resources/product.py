@@ -128,7 +128,7 @@ class ProductResource(Resource):
         del data["id"]
         del data["created_at"]
         del data["updated_at"]
-        
+
         product_snapshot = ProductSnapshot(**data)
         try:
             product_snapshot.save()
