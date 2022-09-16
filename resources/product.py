@@ -54,6 +54,8 @@ class ProductListResource(Resource):
         data["product_id"] = data["id"]
         data["user_id"] = current_user
         del data["id"]
+        del data["created_at"]
+        del data["updated_at"]
 
         product_snapshot = ProductSnapshot(**data)
         try:
@@ -124,7 +126,9 @@ class ProductResource(Resource):
         data["product_id"] = data["id"]
         data["user_id"] = current_user
         del data["id"]
-
+        del data["created_at"]
+        del data["updated_at"]
+        
         product_snapshot = ProductSnapshot(**data)
         try:
             product_snapshot.save()
