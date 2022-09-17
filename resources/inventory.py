@@ -46,7 +46,54 @@ class InventoryListResource(Resource):
         return inventory_schema.dump(inventory)
 
 
-# class InventoryResource(Resource):
-#     @jwt_required()
-#     def get(self, inventory_id):
-#         inventory = Inventory.get_by
+class InventoryResource(Resource):
+    @jwt_required()
+    def get(self, product_id):
+        inventory = Inventory.get_by_product_id(product_id)
+        if inventory is None:
+            return {"message": "Product not found"}, HTTPStatus.NOT_FOUND
+        return inventory_schema.dump(inventory)
+
+    @jwt_required()
+    def delete(self, product_id):
+        inventory = Inventory.get_by_product_id(product_id)
+        if inventory is None:
+            return {"message": "Product not found"}, HTTPStatus.NOT_FOUND
+
+        current_user = get_jwt_identity()
+        if User.get_by_id(current_user).role_id > 2:  # 1-Admin, 2-Manager, 3-User
+            return {"message": "Access is not allowed"}, HTTPStatus.FORBIDDEN
+
+        inventory.delete()
+        return {}, HTTPStatus.NO_CONTENT
+
+    @jwt_required()
+    def put(self, product_id):
+        json_data = request.get_json()
+        try:
+            data = inventory_schema.load(data=json_data)
+        except ValidationError as err:
+            return {
+                "message": "Validation errors",
+                "errors": err.messages,
+            }, HTTPStatus.BAD_REQUEST
+
+        inventory = Inventory.get_by_product_id(product_id)
+        if inventory is None:
+            return {"message": "Product not found"}, HTTPStatus.NOT_FOUND
+
+        current_user = get_jwt_identity()
+        if User.get_by_id(current_user).role_id > 2:  # 1-Admin, 2-Manager, 3-User
+            return {"message": "Access is not allowed"}, HTTPStatus.FORBIDDEN
+
+        inventory.count = data["count"]
+        inventory.user_id = current_user
+
+        try:
+            inventory.save()
+        except DatabaseError as err:
+            return {
+                "message": "Database errors",
+                "errors": str(err.orig),
+            }, HTTPStatus.BAD_REQUEST
+        return inventory_schema.dump(inventory)
