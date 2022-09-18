@@ -12,6 +12,7 @@ from resources.user import UserListResource, UserResource, MeResource
 from resources.product import ProductListResource, ProductResource
 from resources.inventory import InventoryListResource, InventoryResource
 from models.role import Role  # pylint: disable=unused-import
+from models.sex import Sex  # pylint: disable=unused-import
 from models.product_snapshot import ProductSnapshot  # pylint: disable=unused-import
 
 
