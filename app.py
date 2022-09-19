@@ -12,8 +12,8 @@ from resources.user import UserListResource, UserResource, MeResource
 from resources.product import ProductListResource, ProductResource
 from resources.inventory import InventoryListResource, InventoryResource
 from resources.sex import SexListResource, SexResource
+from resources.size import SizeListResource, SizeResource
 from models.role import Role  # pylint: disable=unused-import
-from models.size import Size  # pylint: disable=unused-import
 from models.product_snapshot import ProductSnapshot  # pylint: disable=unused-import
 
 
@@ -51,6 +51,8 @@ def register_resources(app):
     api.add_resource(InventoryResource, "/inventory/<int:product_id>")
     api.add_resource(SexListResource, "/sex")
     api.add_resource(SexResource, "/sex/<int:sex_id>")
+    api.add_resource(SizeListResource, "/size")
+    api.add_resource(SizeResource, "/size/<int:size_id>")
 
 
 if __name__ == "__main__":

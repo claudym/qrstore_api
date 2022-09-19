@@ -9,7 +9,7 @@ class Size(db.Model):
     @classmethod
     def get_by_id(cls, size_id):
         return cls.query.filter_by(id=size_id).first()
-    
+
     @classmethod
     def get_all(cls):
         return cls.query.all()
