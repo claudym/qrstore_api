@@ -34,8 +34,8 @@ class ProductListResource(Resource):
 
         product = Product(**data)
         product.user_id = current_user
-        product_db = Product.get_by_desc_price_size(
-            product.desc, product.price, product.size
+        product_db = Product.get_by_desc_price_size_sex(
+            product.desc, product.price, product.size_id, product.sex_id
         )
         if product_db is not None:
             return {
