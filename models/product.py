@@ -6,8 +6,9 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     desc = db.Column(db.String(100), nullable=False)
     price = db.Column(db.Numeric(), nullable=False)
-    size = db.Column(db.String(50), nullable=False)
-    sex = db.Column(db.String(10), nullable=False)
+    size_id = db.Column(db.Integer, db.ForeignKey("size.id"))
+    sex_id = db.Column(db.Integer, db.ForeignKey("sex.id"))
+    kid = db.Column(db.Boolean(), nullable=False)
     image = db.Column(db.String(100), default=None)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
@@ -27,8 +28,10 @@ class Product(db.Model):
         return cls.query.filter_by(id=product_id).first()
 
     @classmethod
-    def get_by_desc_price_size(cls, desc, price, size):
-        return cls.query.filter_by(desc=desc, price=price, size=size).first()
+    def get_by_desc_price_size_sex(cls, desc, price, size_id, sex_id):
+        return cls.query.filter_by(
+            desc=desc, price=price, size_id=size_id, sex_id=sex_id
+        ).first()
 
     def save(self):
         db.session.add(self)

@@ -4,11 +4,12 @@ from extensions import db
 class ProductSnapshot(db.Model):
     __tablename__ = "product_snapshot"
     id = db.Column(db.Integer, primary_key=True)
-    product_id = db.Column(db.Integer, db.ForeignKey("product.id"))
+    product_id = db.Column(db.Integer, nullable=False)
     desc = db.Column(db.String(100), nullable=False)
     price = db.Column(db.Numeric(), nullable=False)
-    size = db.Column(db.String(50), nullable=False)
-    sex = db.Column(db.String(10), nullable=False)
+    size_id = db.Column(db.Integer, db.ForeignKey("size.id"))
+    sex_id = db.Column(db.Integer, db.ForeignKey("sex.id"))
+    kid = db.Column(db.Boolean(), nullable=False)
     user_id = db.Column(db.Integer)
     created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
 
