@@ -9,3 +9,7 @@ class Role(db.Model):
     @classmethod
     def get_by_id(cls, id_):
         return cls.query.filter_by(id=id_).first()
+
+    @classmethod
+    def get_all(cls):
+        return cls.query.all()
