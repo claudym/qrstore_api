@@ -15,6 +15,7 @@ from resources.sex import SexListResource, SexResource
 from resources.size import SizeListResource, SizeResource
 from models.role import Role  # pylint: disable=unused-import
 from models.product_snapshot import ProductSnapshot  # pylint: disable=unused-import
+from models.order_status import OrderStatus  # pylint: disable=unused-import
 
 
 def create_app():
