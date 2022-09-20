@@ -18,6 +18,7 @@ from resources.payment_method import PaymentMethodListResource, PaymentMethodRes
 from resources.role import RoleListResource, RoleResource
 from models.product_snapshot import ProductSnapshot  # pylint: disable=unused-import
 from models.order import Order  # pylint: disable=unused-import
+from models.order_item import OrderItem  # pylint: disable=unused-import
 
 
 def create_app():
