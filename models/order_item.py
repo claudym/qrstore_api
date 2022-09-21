@@ -22,3 +22,11 @@ class OrderItem(db.Model):
     @classmethod
     def get_by_id(cls, order_item_id):
         return cls.query.filter_by(id=order_item_id).first()
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
