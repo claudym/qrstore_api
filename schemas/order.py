@@ -16,6 +16,6 @@ class OrderSchema(Schema):
     customer_phone = fields.Str(validate=[validate.Length(max=20)])
     customer_email = fields.Email(validate=[validate.Length(max=100)])
     tax_id = fields.Str(validate=[validate.Length(max=50)])
-    order_items = fields.List(fields.Nested(OrderItemSchema, load_only=True))
+    order_items = fields.List(fields.Nested(OrderItemSchema))
     created_at = fields.DateTime(dump_only=True)
     updated_at = fields.DateTime(dump_only=True)
