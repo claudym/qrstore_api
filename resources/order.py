@@ -108,3 +108,12 @@ class OrderListResource(Resource):
 
         print("inventory.count", inventory.count)  # testing
         return order_dump, HTTPStatus.CREATED
+
+
+class OrderResource(Resource):
+    @jwt_required()
+    def get(self, order_id):
+        order = Order.get_by_id(order_id)
+        if order is None:
+            return {"message": "Order not found"}, HTTPStatus.NOT_FOUND
+        return order_schema.dump(order)
