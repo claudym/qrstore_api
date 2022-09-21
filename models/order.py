@@ -20,6 +20,7 @@ class Order(db.Model):
         server_default=db.func.now(),
         onupdate=db.func.now(),
     )
+    order_items = db.relationship('OrderItem', backref='order_item')
 
     @classmethod
     def get_all(cls):
