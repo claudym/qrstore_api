@@ -16,7 +16,7 @@ from resources.size import SizeListResource, SizeResource
 from resources.order_status import OrderStatusListResource, OrderStatusResource
 from resources.payment_method import PaymentMethodListResource, PaymentMethodResource
 from resources.role import RoleListResource, RoleResource
-from resources.order import OrderListResource
+from resources.order import OrderListResource, OrderResource
 from models.product_snapshot import ProductSnapshot  # pylint: disable=unused-import
 from models.order_item import OrderItem  # pylint: disable=unused-import
 
@@ -51,7 +51,7 @@ def register_resources(app):
     api.add_resource(MeResource, "/me")
     api.add_resource(RoleListResource, "/role")
     api.add_resource(RoleResource, "/role/<int:role_id>")
-    api.add_resource(ProductListResource, "/products")
+    api.add_resource(ProductListResource, "/product")
     api.add_resource(ProductResource, "/product/<int:product_id>")
     api.add_resource(InventoryListResource, "/inventory")
     api.add_resource(InventoryResource, "/inventory/<int:product_id>")
@@ -59,11 +59,12 @@ def register_resources(app):
     api.add_resource(SexResource, "/sex/<int:sex_id>")
     api.add_resource(SizeListResource, "/size")
     api.add_resource(SizeResource, "/size/<int:size_id>")
+    api.add_resource(OrderListResource, "/order")
+    api.add_resource(OrderResource, "/order/<int:order_id>")
     api.add_resource(OrderStatusListResource, "/order-status")
     api.add_resource(OrderStatusResource, "/order-status/<int:order_status_id>")
     api.add_resource(PaymentMethodListResource, "/payment-method")
     api.add_resource(PaymentMethodResource, "/payment-method/<int:payment_method_id>")
-    api.add_resource(OrderListResource, "/order")
 
 
 if __name__ == "__main__":
