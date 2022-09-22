@@ -10,14 +10,14 @@ from resources.token import (
 )
 from resources.user import UserListResource, UserResource, MeResource
 from resources.product import ProductListResource, ProductResource
+from resources.product_snapshot import ProductSnapshotResource
 from resources.inventory import InventoryListResource, InventoryResource
 from resources.sex import SexListResource, SexResource
 from resources.size import SizeListResource, SizeResource
+from resources.order import OrderListResource, OrderResource
 from resources.order_status import OrderStatusListResource, OrderStatusResource
 from resources.payment_method import PaymentMethodListResource, PaymentMethodResource
 from resources.role import RoleListResource, RoleResource
-from resources.order import OrderListResource, OrderResource
-from models.product_snapshot import ProductSnapshot  # pylint: disable=unused-import
 from models.order_item import OrderItem  # pylint: disable=unused-import
 
 
@@ -53,6 +53,9 @@ def register_resources(app):
     api.add_resource(RoleResource, "/role/<int:role_id>")
     api.add_resource(ProductListResource, "/product")
     api.add_resource(ProductResource, "/product/<int:product_id>")
+    api.add_resource(
+        ProductSnapshotResource, "/product-snapshot/<int:product_snapshot_id>"
+    )
     api.add_resource(InventoryListResource, "/inventory")
     api.add_resource(InventoryResource, "/inventory/<int:product_id>")
     api.add_resource(SexListResource, "/sex")
