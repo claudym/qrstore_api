@@ -39,8 +39,10 @@ class RefreshTokenResource(Resource):
 
 
 class RevokeTokenResource(Resource):
-    @jwt_required()
-    def post(self):
-        jti = get_jwt()["jti"]
+    @jwt_required(verify_type=False)
+    def delete(self):
+        token = get_jwt()
+        jti = token["jti"]
+        ttype = token["type"]
         block_list.add(jti)
-        return {"message": "Successfully logged out"}
+        return {"message": f"{ttype.capitalize()} token successfully revoked"}
