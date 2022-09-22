@@ -39,7 +39,7 @@ class OrderListResource(Resource):
         data["user_id"] = current_user
         # Compute total and get product_snapshot_id_list
         order_items = data["order_items"]
-        total = Decimal("0")
+        total = Decimal("0.00")
         product_snapshot_id_list = []
         for item in order_items:
             product = Product.get_by_id(item["product_id"])
@@ -53,7 +53,7 @@ class OrderListResource(Resource):
             product_snapshot_id_list.append(product_snapshot.id)
         if data["payment"] > total:
             return {
-                "message": "Payment cannot be more than total"
+                "message": f"Payment cannot be more than total (${total:,})"
             }, HTTPStatus.BAD_REQUEST
         data["total"] = total
         # Compare total with payment and set order_status_id
@@ -103,7 +103,7 @@ class OrderListResource(Resource):
             if delta < 0:
                 return {
                     "message": f"Count cannot be less than 0. (product_id: {order_items[i]['product_id']}, inventory_count: {inventory.count})"
-                }
+                }, HTTPStatus.BAD_REQUEST
             inventory.count -= order_items[i]["count"]
             try:
                 inventory.save()
@@ -159,7 +159,7 @@ class OrderResource(Resource):
         ):  # status: canceled and role: user
             return {
                 "message": "This user is not authorized to cancel orders"
-            }, HTTPStatus.UNAUTHORIZED
+            }, HTTPStatus.FORBIDDEN
         order.user_id = current_user
         if data.get("order_status_id") == 3:
             for item in order.order_items:
