@@ -42,14 +42,14 @@ class UserListResource(Resource):
 
 
 class UserResource(Resource):
-    @jwt_required(optional=True)
+    @jwt_required()
     def get(self, username):
         user = User.get_by_username(username)
         if user is None:
-            return {"message": "user not found."}, HTTPStatus.NOT_FOUND
+            return {"message": "User not found"}, HTTPStatus.NOT_FOUND
 
         current_user = get_jwt_identity()
-        if current_user == user.id:
+        if current_user == user.id or User.get_by_id(current_user).role_id < 3:
             return user_schema.dump(user)
         return user_public_schema.dump(user)
 
@@ -57,5 +57,5 @@ class UserResource(Resource):
 class MeResource(Resource):
     @jwt_required()
     def get(self):
-        user = User.get_by_id(id_=get_jwt_identity())
+        user = User.get_by_id(get_jwt_identity())
         return user_schema.dump(user)
