@@ -14,6 +14,4 @@ class ProductSchema(Schema):
     kid = fields.Boolean(required=True)
     created_at = fields.DateTime(dump_only=True)
     updated_at = fields.DateTime(dump_only=True)
-    user = fields.Nested(
-        UserSchema, attribute="user", dump_only=True, only=["id", "username"]
-    )
+    user_id = fields.Int(dump_only=True)
