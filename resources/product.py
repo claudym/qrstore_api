@@ -94,7 +94,9 @@ class ProductResource(Resource):
     def patch(self, product_id):
         json_data = request.get_json()
         try:
-            data = product_schema.load(data=json_data, partial=("desc",))
+            data = product_schema.load(
+                data=json_data, partial=("desc", "price", "size_id", "sex_id", "kid")
+            )
         except ValidationError as err:
             return {
                 "message": "Validation errors",
@@ -111,7 +113,9 @@ class ProductResource(Resource):
 
         product.desc = data.get("desc") or product.desc
         product.price = data.get("price") or product.price
-        product.size = data.get("size") or product.size
+        product.size_id = data.get("size_id") or product.size_id
+        product.sex_id = data.get("sex_id") or product.sex_id
+        product.kid = data.get("kid") or product.kid
         product.user_id = current_user
 
         try:
