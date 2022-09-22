@@ -160,7 +160,6 @@ class OrderResource(Resource):
             return {
                 "message": "This user is not authorized to cancel orders"
             }, HTTPStatus.UNAUTHORIZED
-        order_items = data.get("order_items")
         order.user_id = current_user
         if data.get("order_status_id") == 3:
             for item in order.order_items:
