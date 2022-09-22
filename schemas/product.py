@@ -1,5 +1,4 @@
 from marshmallow import Schema, fields, validate
-from schemas.user import UserSchema
 
 
 class ProductSchema(Schema):
