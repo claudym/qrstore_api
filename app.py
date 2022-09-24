@@ -70,6 +70,4 @@ def register_resources(app):
     api.add_resource(PaymentMethodResource, "/payment-method/<int:payment_method_id>")
 
 
-if __name__ == "__main__":
-    application = create_app()
-    application.run()
+server = create_app()
