@@ -1,14 +1,20 @@
 from flask import Flask
 from flask_restful import Api
 from flask_migrate import Migrate
-from extensions import db, jwt
+from flask_uploads import configure_uploads
+from extensions import db, jwt, image_set
 from resources.token import (
     TokenResource,
     RefreshTokenResource,
     RevokeTokenResource,
     block_list,
 )
-from resources.user import UserListResource, UserResource, MeResource
+from resources.user import (
+    UserListResource,
+    UserResource,
+    MeResource,
+    UserPhotoUploadResource,
+)
 from resources.product import ProductListResource, ProductResource
 from resources.product_snapshot import ProductSnapshotResource
 from resources.inventory import InventoryListResource, InventoryResource
@@ -33,6 +39,7 @@ def register_extensions(app):
     db.init_app(app)
     migrate = Migrate(app, db)  # pylint: disable=unused-variable
     jwt.init_app(app)
+    configure_uploads(app, image_set)
 
     @jwt.token_in_blocklist_loader
     # pylint: disable-next=unused-argument
@@ -48,6 +55,7 @@ def register_resources(app):
     api.add_resource(RevokeTokenResource, "/revoke")
     api.add_resource(UserListResource, "/users")
     api.add_resource(UserResource, "/user/<string:username>")
+    api.add_resource(UserPhotoUploadResource, "/user/photo")
     api.add_resource(MeResource, "/me")
     api.add_resource(RoleListResource, "/role")
     api.add_resource(RoleResource, "/role/<int:role_id>")

@@ -1,4 +1,5 @@
 from marshmallow import Schema, fields
+from flask import url_for
 from utils import hash_password
 
 
@@ -16,6 +17,15 @@ class UserSchema(Schema):
     tax_id = fields.Str()
     created_at = fields.DateTime(dump_only=True)
     updated_at = fields.DateTime(dump_only=True)
+    photo_url = fields.Method(serialize="dump_photo_url")
+
+    def dump_photo_url(self, user):
+        if user.photo:
+            return url_for("static", filename=f"photos/{user.photo}", _external=True)
+        else:
+            return url_for(
+                "static", filename="assets/default-photo.jpg", _external=True
+            )
 
     def load_hashed(self, value):
         return hash_password(value)
