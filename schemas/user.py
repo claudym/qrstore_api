@@ -21,10 +21,18 @@ class UserSchema(Schema):
 
     def dump_photo_url(self, user):
         if user.photo:
-            return url_for("static", filename=f"photos/{user.photo}", _external=True)
+            return url_for(
+                "static",
+                filename=f"photos/{user.photo}",
+                _external=True,
+                _scheme="https",
+            )
         else:
             return url_for(
-                "static", filename="assets/default-photo.jpg", _external=True
+                "static",
+                filename="assets/default-photo.jpg",
+                _external=True,
+                _scheme="https",
             )
 
     def load_hashed(self, value):
