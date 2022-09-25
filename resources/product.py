@@ -1,9 +1,12 @@
+import os
 from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from http import HTTPStatus
 from marshmallow import ValidationError
 from sqlalchemy.exc import DatabaseError
+from extensions import image_set
+from utils import save_image
 from models.user import User
 from models.product import Product
 from models.product_snapshot import ProductSnapshot
@@ -11,6 +14,7 @@ from schemas.product import ProductSchema
 
 
 product_schema = ProductSchema()
+product_image_schema = ProductSchema(only=("image",))
 product_list_schema = ProductSchema(many=True)
 
 
@@ -56,6 +60,7 @@ class ProductListResource(Resource):
         del data["id"]
         del data["created_at"]
         del data["updated_at"]
+        del data["image"]
 
         product_snapshot = ProductSnapshot(**data)
         try:
@@ -132,6 +137,7 @@ class ProductResource(Resource):
         del data["id"]
         del data["created_at"]
         del data["updated_at"]
+        del data["image"]
 
         product_snapshot = ProductSnapshot(**data)
         try:
@@ -143,3 +149,22 @@ class ProductResource(Resource):
                 "errors": str(err.orig),
             }, HTTPStatus.BAD_REQUEST
         return product_schema.dump(product)
+
+
+class ProductImageUploadResource(Resource):
+    @jwt_required()
+    def put(self, product_id):
+        file = request.files.get("image")
+        if not file:
+            return {"message": "Not a valid image"}, HTTPStatus.BAD_REQUEST
+        if not image_set.file_allowed(file, file.filename):
+            return {"message": "File type not allowed"}, HTTPStatus.BAD_REQUEST
+        product = Product.get_by_id(product_id)
+        if product.image:
+            image_path = image_set.path(folder="products", filename=product.image)
+            if os.path.exists(image_path):
+                os.remove(image_path)
+        filename = save_image(image=file, folder="products")
+        product.image = filename
+        product.save()
+        return product_image_schema.dump(product)

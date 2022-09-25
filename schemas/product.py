@@ -1,4 +1,5 @@
 from marshmallow import Schema, fields, validate
+from flask import url_for
 
 
 class ProductSchema(Schema):
@@ -14,3 +15,13 @@ class ProductSchema(Schema):
     created_at = fields.DateTime(dump_only=True)
     updated_at = fields.DateTime(dump_only=True)
     user_id = fields.Int(dump_only=True)
+    image = fields.Method(serialize="dump_image_url")
+
+    def dump_image_url(self, product):
+        if product.image:
+            return url_for(
+                "static",
+                filename=f"products/{product.image}",
+                _external=True,
+                _scheme="https",
+            )

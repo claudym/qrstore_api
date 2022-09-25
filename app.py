@@ -16,7 +16,11 @@ from resources.user import (
     MeResource,
     UserPhotoUploadResource,
 )
-from resources.product import ProductListResource, ProductResource
+from resources.product import (
+    ProductListResource,
+    ProductResource,
+    ProductImageUploadResource,
+)
 from resources.product_snapshot import ProductSnapshotResource
 from resources.inventory import InventoryListResource, InventoryResource
 from resources.sex import SexListResource, SexResource
@@ -63,6 +67,7 @@ def register_resources(app):
     api.add_resource(RoleResource, "/role/<int:role_id>")
     api.add_resource(ProductListResource, "/product")
     api.add_resource(ProductResource, "/product/<int:product_id>")
+    api.add_resource(ProductImageUploadResource, "/product/<int:product_id>/image")
     api.add_resource(
         ProductSnapshotResource, "/product-snapshot/<int:product_snapshot_id>"
     )
