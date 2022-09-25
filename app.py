@@ -2,6 +2,7 @@ from flask import Flask
 from flask_restful import Api
 from flask_migrate import Migrate
 from flask_uploads import configure_uploads
+from flask_cors import CORS
 from extensions import db, jwt, image_set
 from resources.token import (
     TokenResource,
@@ -40,6 +41,7 @@ def register_extensions(app):
     migrate = Migrate(app, db)  # pylint: disable=unused-variable
     jwt.init_app(app)
     configure_uploads(app, image_set)
+    CORS(app)
 
     @jwt.token_in_blocklist_loader
     # pylint: disable-next=unused-argument
