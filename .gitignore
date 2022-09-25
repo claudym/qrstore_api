@@ -132,4 +132,5 @@ dmypy.json
 .pyre/
 
 # flask
-static/
+static/photos
+static/products
