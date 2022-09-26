@@ -87,6 +87,6 @@ def register_resources(app):
 
 
 server = create_app()
-gunicorn_error_logger = logging.getLogger('gunicorn.error')
+gunicorn_error_logger = logging.getLogger("gunicorn.error")
 server.logger.handlers.extend(gunicorn_error_logger.handlers)
 server.logger.setLevel(logging.DEBUG)
